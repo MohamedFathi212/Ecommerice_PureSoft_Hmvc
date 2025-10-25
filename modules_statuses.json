@@ -1,0 +1,13 @@
+{
+    "Auth": true,
+    "Admin": true,
+    "Home": true,
+    "User": true,
+    "Products": true,
+    "Category": true,
+    "Cart": true,
+    "Orders": true,
+    "Payment": true,
+    "Contact": true,
+    "Dashboard": true
+}
