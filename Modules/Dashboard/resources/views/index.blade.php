@@ -8,7 +8,6 @@
     <!-- Title Section -->
     <div class="mb-4">
         <h2 class="fw-bold">Welcome back, {{ Auth::user()->name ?? 'Admin' }} </h2>
-        <p class="text-muted">Here’s what’s happening in your store today.</p>
     </div>
 
     <!-- Stats Cards -->
@@ -19,7 +18,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5>Total Users</h5>
-                        <h3>0</h3>
+                        <h3>{{ $totalUsers }}</h3>
                     </div>
                     <i class="fa-solid fa-users fa-2x"></i>
                 </div>
@@ -31,7 +30,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5>Products</h5>
-                        <h3>0</h3>
+                        <h3>{{ $totalProducts }}</h3>
                     </div>
                     <i class="fa-solid fa-box fa-2x"></i>
                 </div>
@@ -56,7 +55,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5>Orders</h5>
-                        <h3>0</h3>
+                        <h3>{{  $totalOrders  }}</h3>
                     </div>
                     <i class="fa-solid fa-cart-shopping fa-2x"></i>
                 </div>
@@ -77,7 +76,7 @@
             <div class="card shadow-sm border-0 rounded-3 p-4">
                 <h5 class="fw-bold mb-3">Recent Activities</h5>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"> New order received from John</li>
+                    <li class="list-group-item"> New order received from {{auth()->user()->name}} </li>
                     <li class="list-group-item"> New user registered: {{auth()->user()->name}}</li>
                     <li class="list-group-item"> Product “Wireless Headphones” updated</li>
                     <li class="list-group-item"> Payment of $240 processed</li>

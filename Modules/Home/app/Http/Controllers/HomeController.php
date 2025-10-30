@@ -3,54 +3,114 @@
 namespace Modules\Home\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // الصفحة الرئيسية
     public function index()
     {
-        return view('home::index');
+        $categories = Category::all();
+        $products   = Product::latest()->take(4)->get();
+
+        return view('home::index', compact('categories', 'products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // عرض المنتجات حسب التصنيف
+    public function category($id)
     {
-        return view('home::create');
+        $category = Category::find($id);
+
+        if (!$category) {
+            return redirect()->route('home.index')->with('error', 'Category not found.');
+        }
+
+        $products = Product::where('category_id', $id)->get();
+
+        return view('home::category', compact('category', 'products'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
+public function products(Request $request)
+{
+    $query = Product::query();
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    if ($request->filled('search')) {
+        $query->where('name', 'like', '%' . $request->search . '%');
+    }
+
+    if ($request->filled('category_id')) {
+        $query->where('category_id', $request->category_id);
+    }
+
+    if ($request->filled('min_price')) {
+        $query->where('price', '>=', $request->min_price);
+    }
+    if ($request->filled('max_price')) {
+        $query->where('price', '<=', $request->max_price);
+    }
+
+    if ($request->filled('sort')) {
+        switch ($request->sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'latest':
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+    } else {
+        $query->latest();
+    }
+
+    $products = $query->paginate(12);
+    $categories = Category::all();
+
+    if ($request->ajax()) {
+        return view('home::partials.product_grid', compact('products'))->render();
+    }
+
+    return view('home::products', compact('products', 'categories'));
+}
+
+    // عرض منتج واحد بالتفصيل
+    public function product($id)
     {
-        return view('home::show');
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->route('home.index')->with('error', 'Product not found.');
+        }
+
+        return view('home::product', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    // تنفيذ الطلب (Order)
+    public function order(Request $request, $id)
     {
-        return view('home::edit');
+        if (!Auth::check()) {
+            return redirect()->route('auth.login')->with('error', 'Please login to place an order.');
+        }
+
+        $product = Product::find($id);
+        if (!$product) {
+            return redirect()->route('home.index')->with('error', 'Product not found.');
+        }
+
+        Order::create([
+            'user_id'        => Auth::id(),
+            'product_id'     => $product->id,
+            'total'          => $product->price,
+            'status'         => 'pending',
+            'payment_method' => 'cash',
+        ]);
+
+        return redirect()->route('home.index')->with('success', 'Order placed successfully!');
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
 }

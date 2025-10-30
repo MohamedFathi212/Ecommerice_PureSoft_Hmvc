@@ -3,54 +3,51 @@
 namespace Modules\Orders\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('orders::index');
+        $orders = Order::with(['user'])->latest()->paginate(10);
+        return view('orders::index', compact('orders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('orders::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
     public function show($id)
     {
-        return view('orders::show');
+        $order = Order::with(['user', 'items.product'])->findOrFail($id);
+        return view('orders::show', compact('order'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        return view('orders::edit');
+        $order = Order::with(['user', 'items.product'])->findOrFail($id);
+        $users = User::all();  
+        return view('orders::edit', compact('order', 'users'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
+    public function update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+        $validated = $request->validate([
+            'status' => 'required|string',
+            'user_id' => 'required|exists:users,id',
+            'total_price' => 'required|numeric|min:0',
+        ]);
+
+        $order->update($validated);
+
+        return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->delete();
+
+        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
+    }
 }

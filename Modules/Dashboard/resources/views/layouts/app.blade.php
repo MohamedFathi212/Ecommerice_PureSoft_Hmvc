@@ -120,7 +120,7 @@
                 <a href="{{ route('admin.dashboard') }}"><i class="fa-solid fa-gauge"></i> Dashboard</a>
             </li>
             <li class="{{ request()->is('admin/users') ? 'active' : '' }}">
-                <a href="{{ route('admin.users') }}"><i class="fa-solid fa-users"></i> Users</a>
+                <a href="{{ route('users.index') }}"><i class="fa-solid fa-users"></i> Users</a>
             </li>
             <li class="{{ request()->is('admin/categories') ? 'active' : '' }}">
                 <a href="{{ route('categories.index') }}"><i class="fa-solid fa-layer-group"></i>Categories</a>
@@ -128,6 +128,11 @@
             <li class="{{ request()->is('admin/products') ? 'active' : '' }}">
                 <a href="{{ route('products.index') }}"><i class="fa-solid fa-box"></i> Products</a>
             </li>
+
+            <li class="{{ request()->is('admin/orders') ? 'active' : '' }}">
+                <a href="{{ route('orders.index') }}"><i class="fa-solid fa-cart-shopping"></i> Orders</a>
+            </li>
+
 
         </ul>
     </div>
@@ -155,7 +160,7 @@
         </div>
 
         <footer>
-            &copy; {{ date('Y') }} - Mohamed Fathi | All Rights Reserved.
+            &copy; {{ date('Y') }} - Mohamed | All Rights Reserved.
         </footer>
     </div>
 

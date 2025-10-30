@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <h3 class="mb-4">Edit Product</h3>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -27,11 +26,6 @@
         <div class="mb-3">
             <label for="name" class="form-label">Product Name</label>
             <input type="text" name="name" id="name" value="{{ $product->name }}" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="slug" class="form-label">Slug</label>
-            <input type="text" name="slug" id="slug" value="{{ $product->slug }}" class="form-control" required>
         </div>
 
         <div class="mb-3">

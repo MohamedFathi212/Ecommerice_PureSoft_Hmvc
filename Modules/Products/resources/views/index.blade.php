@@ -5,7 +5,6 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3>Products</h3>
         <a href="{{ route('products.create') }}" class="btn btn-primary">Add New Product</a>
     </div>
 
@@ -19,7 +18,6 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Slug</th>
                 <th>Category</th>
                 <th>Price</th>
                 <th>Image</th>
@@ -31,7 +29,6 @@
             <tr>
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->name }}</td>
-                <td>{{ $product->slug }}</td>
                 <td>{{ $product->category->name ?? 'N/A' }}</td>
                 <td>${{ number_format($product->price, 2) }}</td>
                 <td>

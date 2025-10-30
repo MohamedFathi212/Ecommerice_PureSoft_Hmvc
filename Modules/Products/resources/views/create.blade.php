@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <h3 class="mb-4">Add New Product</h3>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -28,10 +27,6 @@
             <input type="text" name="name" id="name" class="form-control" placeholder="Enter product name" required>
         </div>
 
-        <div class="mb-3">
-            <label for="slug" class="form-label">Slug</label>
-            <input type="text" name="slug" id="slug" class="form-control" placeholder="Enter slug" required>
-        </div>
 
         <div class="mb-3">
             <label for="category_id" class="form-label">Category</label>

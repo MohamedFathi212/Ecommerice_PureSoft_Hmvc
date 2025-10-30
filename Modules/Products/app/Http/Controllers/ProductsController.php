@@ -3,8 +3,8 @@
 namespace Modules\Products\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -25,7 +25,6 @@ class ProductsController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:products,name',
-            'slug' => 'required|unique:products,slug',
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -56,7 +55,6 @@ class ProductsController extends Controller
 
         $request->validate([
             'name' => 'required|unique:products,name,' . $product->id,
-            'slug' => 'required|unique:products,slug,' . $product->id,
             'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);

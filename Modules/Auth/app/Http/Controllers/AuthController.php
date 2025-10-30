@@ -3,10 +3,10 @@
 namespace Modules\Auth\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -18,7 +18,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required|min:6',
         ]);
 
@@ -26,26 +26,27 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+            $user = Auth::user();
 
-            if (Auth::user()->role === 'admin') {
-                return redirect()->route('admin.dashboard')->with('success', 'Welcome Admin 👑');
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard')
+                                 ->with('success', 'Welcome back, Admin 👑');
             }
 
-            return redirect()->intended('/')->with('success', 'Welcome back!');
+            return redirect()->route('home.index')
+                             ->with('success', 'Welcome back, ' . $user->name . '!');
         }
 
         return back()->withErrors([
-            'email' => 'Invalid credentials.',
+            'email' => 'Invalid credentials, please try again.',
         ])->onlyInput('email');
     }
 
-    // 🟢 عرض صفحة التسجيل
     public function showRegisterForm()
     {
         return view('auth::register');
     }
 
-    // 🟢 تنفيذ عملية التسجيل
     public function register(Request $request)
     {
         $request->validate([
@@ -63,10 +64,10 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/')->with('success', 'Account created successfully!');
+        return redirect()->route('home.index')
+                         ->with('success', 'Account created successfully! Welcome, ' . $user->name . ' 👋');
     }
 
-    // 🟢 تسجيل الخروج
     public function logout(Request $request)
     {
         Auth::logout();
@@ -74,6 +75,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('auth.login')->with('success', 'You have been logged out.');
+        return redirect()->route('auth.login')->with('success', 'You have been logged out successfully.');
     }
 }
