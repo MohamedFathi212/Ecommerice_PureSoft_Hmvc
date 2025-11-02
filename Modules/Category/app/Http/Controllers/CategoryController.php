@@ -23,10 +23,10 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:categories,name',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->only(['name', 'slug']);
+        $data = $request->only(['name']);
 
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
@@ -51,10 +51,10 @@ class CategoryController extends Controller
 
         $request->validate([
             'name' => 'required|unique:categories,name,' . $category->id,
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $request->only(['name', 'slug']);
+        $data = $request->only(['name']);
 
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();

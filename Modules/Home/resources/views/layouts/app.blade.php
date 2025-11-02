@@ -43,6 +43,25 @@
         .hero p {
             font-size: 1.2rem;
         }
+
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .cart-bounce {
+            animation: bounce 0.6s ease;
+            color: #007bff;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -63,6 +82,21 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('home.products') }}">Products</a>
                     </li>
+
+                    @php
+                    $cartCount = is_array(session('cart')) ? array_sum(array_column(session('cart'), 'quantity')) : 0;
+                    @endphp
+
+                    <a href="{{ route('cart.index') }}"
+                        class="nav-link position-relative {{ session('success') ? 'cart-bounce' : '' }}">
+                        <i class="fa-solid fa-cart-shopping me-1"></i> Cart
+                        @if($cartCount > 0)
+                        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
+                            {{ $cartCount }}
+                        </span>
+                        @endif
+                    </a>
+
                     <li class="nav-item"><a class="nav-link" href="#">Orders</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
 

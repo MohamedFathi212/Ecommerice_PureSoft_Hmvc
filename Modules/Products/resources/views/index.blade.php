@@ -9,7 +9,7 @@
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+    <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     @if($products->count() > 0)
@@ -33,9 +33,9 @@
                 <td>${{ number_format($product->price, 2) }}</td>
                 <td>
                     @if($product->image)
-                        <img src="{{ asset('uploads/products/'.$product->image) }}" alt="{{ $product->name }}" width="50" height="50" class="rounded">
+                    <img src="{{ asset('uploads/products/'.$product->image) }}" alt="{{ $product->name }}" width="50" height="50" class="rounded">
                     @else
-                        <span class="text-muted">No Image</span>
+                    <span class="text-muted">No Image</span>
                     @endif
                 </td>
                 <td class="text-center">
@@ -51,11 +51,11 @@
         </tbody>
     </table>
 
-    <div class="mt-3">
-        {{ $products->links() }}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $products->links('pagination::bootstrap-5') }}
     </div>
     @else
-        <div class="alert alert-info">No products found.</div>
+    <div class="alert alert-info">No products found.</div>
     @endif
 </div>
 @endsection

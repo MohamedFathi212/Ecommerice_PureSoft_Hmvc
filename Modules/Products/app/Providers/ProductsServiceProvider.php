@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Illuminate\Pagination\Paginator;
 
 class ProductsServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,7 @@ class ProductsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrapFive(); // أو useBootstrapFour() لو مشروعك Bootstrap 4
         $this->registerCommands();
         $this->registerCommandSchedules();
         $this->registerTranslations();

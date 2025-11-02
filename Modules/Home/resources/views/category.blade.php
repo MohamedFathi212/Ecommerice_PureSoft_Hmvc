@@ -5,7 +5,6 @@
 @section('content')
 <div class="container py-5">
     @if(isset($category))
-        {{-- 🏷️ Header --}}
         <div class="text-center mb-5">
             <h2 class="fw-bold text-primary display-6">{{ $category->name }}</h2>
             <p class="text-muted fs-5">Find the perfect {{ strtolower($category->name) }} for your needs.</p>
@@ -13,7 +12,6 @@
         </div>
 
         <div class="row">
-            {{-- 🛍️ Products --}}
             <div class="col-md-9">
                 <div class="row g-4">
                     @forelse($products as $p)
@@ -53,7 +51,6 @@
     @endif
 </div>
 
-{{-- ✨ Hover + Animation --}}
 <style>
     .product-card:hover img { transform: scale(1.08); }
     .product-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.1); transform: translateY(-4px); transition: all 0.3s ease; }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Category;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,4 +30,8 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
