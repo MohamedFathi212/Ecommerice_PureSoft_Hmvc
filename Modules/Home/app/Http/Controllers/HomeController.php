@@ -101,5 +101,24 @@ class HomeController extends Controller
 
         return view('home::order', compact('product'));
     }
+    public function orders()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('auth.login')->with('error', 'Please login to view your orders.');
+        }
+
+        $orders = Order::where('user_id', Auth::id())->latest()->get();
+
+        return view('home::orders', compact('orders'));
+    }
+
+    public function orderDetails($id)
+    {
+        $order = Order::find($id);
+        if (!$order) {
+            return redirect()->route('home.index')->with('error', 'Order not found.');
+        }
+        return view('home::order_details', compact('order'));
+    }
 
 }
