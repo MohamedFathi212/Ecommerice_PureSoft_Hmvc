@@ -47,31 +47,32 @@ class HomeController extends Controller
         if ($request->filled('min_price')) {
             $query->where('price', '>=', $request->min_price);
         }
+
         if ($request->filled('max_price')) {
             $query->where('price', '<=', $request->max_price);
         }
 
-        if ($request->filled('sort')) {
-            switch ($request->sort) {
-                case 'price_asc':
-                    $query->orderBy('price', 'asc');
-                    break;
-                case 'price_desc':
-                    $query->orderBy('price', 'desc');
-                    break;
-                case 'latest':
-                    $query->orderBy('created_at', 'desc');
-                    break;
-            }
-        } else {
-            $query->latest();
+        switch ($request->sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'latest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                $query->latest();
+                break;
         }
 
-        $products = $query->paginate(12);
+        $products = $query->paginate(8);
         $categories = Category::all();
 
         if ($request->ajax()) {
-            return view('home::partials.product_grid', compact('products'))->render();
+            $html = view('home::partials.product_grid', compact('products'))->render();
+            return response()->json(['html' => $html]);
         }
 
         return view('home::products', compact('products', 'categories'));
@@ -120,5 +121,4 @@ class HomeController extends Controller
         }
         return view('home::order_details', compact('order'));
     }
-
 }
